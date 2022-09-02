@@ -1,0 +1,16 @@
+body{
+    padding: 150px 30px 30px 30px;
+    background-image: url(/img/bg_header_bottom.jpg);
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    background-attachment: fixed;
+    background-size: 100% 100%;
+}
+
+.mainBlock{
+    /*height: 500px;
+    background-size: 100% 100%;
+    background-color: gray;
+    width: 100vw;
+    height: 100vh;*/
+}
