@@ -65,6 +65,81 @@ section:nth-child(2n+1) {
 
 }
 
+.titletable {
+  font-size: 14px;
+  color: #fff;
+
+}
+
+
+/*------------------*/
+/*table {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+  font-size: 14px;
+  background: white;
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  margin: 0 auto 20px;
+  display: inline-block;;
+  border-collapse: separate;
+  box-sizing: border-box;
+  text-indent: initial;
+  border-spacing: 2px;
+  border-color: grey;
+}*/
+
+.nametl {
+  font-size: 48px;
+  color: #fff;
+  margin: 0 auto 40px;
+  text-align: center
+}
+
+.table11 {
+ /* background: url('/img/suggestions.png') 98% 86% no-repeat;*/
+  display: inline-block;
+  border-spacing: 4px;
+  margin: 0 auto 20px;
+  border-collapse: separate;
+  text-indent: initial;
+  width: 200px;
+  font-size: 20px;
+  table-layout: fixed;
+}
+
+.table11 th {
+  font-weight: normal;
+  font-size: 16px;
+  color: #339;
+  padding: 10px 12px;
+  background: white;
+  table-layout: fixed;
+}
+
+.emptycell{
+  background:  black;
+  padding: 10px 12px;
+}
+
+.table11 td {
+  color:  whitesmoke;
+  border-top: 1px solid white;
+  padding: 10px 12px;
+  background: rgba(51, 51, 153, .2);
+  transition: .3s;
+  table-layout: fixed;
+}
+
+.table11 tr:hover td {
+  background: rgba(51, 51, 153, .1);
+}
+
+
+
+
+
+
 @media (max-width: 768px) {
   .title {
     font-size: 30px;
