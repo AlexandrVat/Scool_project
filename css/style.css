@@ -56,6 +56,11 @@ section:nth-child(2n+1) {
 */
 .about{
     background-image: url(/img/children_go_shcool.jpg);
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    
+    background-size: 100% 100%;
+    font-family: "Hibana", sans-serif;
 }
 
 
@@ -103,7 +108,7 @@ section:nth-child(2n+1) {
   margin: 0 auto 20px;
   border-collapse: separate;
   text-indent: initial;
-  width: 200px;
+  width: 250px;
   font-size: 20px;
   table-layout: fixed;
 }

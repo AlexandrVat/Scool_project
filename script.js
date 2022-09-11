@@ -2,7 +2,30 @@ let curTable ;
 let editingTd;
 let mainDiv = document.getElementById('titletable');
 let weekDay = ['Понеділок','Вівторок','Середа','Четвер','П`ятниця']
+let subjects = ['Математика','Біологія','Геометрія', 'Інформатика','Укр. мова','Укр. література','Історія','Праця','Анг. мова','Фіз. культура','Природознавство']
+let weekDayEn = ['monday','tuesday','wednesday','thursday','friday']
 
+//Створюємо початковий розклад зайнять 
+function createShedule(){
+  for (let i = 0; i < weekDayEn.length; ++i) {      
+    let rand;
+    let serialObj;
+    let objless = new Object(); 
+    for (let j = 0; j < 7; ++j) { 
+       rand = Math.floor(Math.random()*subjects.length);
+       objless['item'+j] = subjects[rand];
+    }
+  
+    createNewTable(weekDay[i],objless,i); 
+  
+    serialObj = JSON.stringify(objless); //Робимо з нього стрічку
+    localStorage.setItem(weekDayEn[i], serialObj); //записуємо 
+  }  
+}
+
+createShedule();
+
+/*
 let objless = {
     item1: 'Математика',
     item2: 'Біологія',
@@ -15,11 +38,12 @@ let objless = {
   
   let serialObj = JSON.stringify(objless); //Робимо з нього стрічку
   localStorage.setItem('monday', serialObj); //записуємо 
-
-  
+*/
+    //Створення таблиці
    function createNewTable(nameHead, nameItems, indx){
 
-        let newtable = document.createElement('table');
+        //основа 
+        let newtable = document.createElement('table'); 
             newtable.className = 'table11';
             newtable.setAttribute('id','table'+indx);
 
@@ -28,14 +52,14 @@ let objless = {
         
             newtable.appendChild(thead);
             newtable.appendChild(tbody);
-
+        // робимо шапку таблиці  
         let row_1 = document.createElement('tr');
         let heading_1 = document.createElement('th');
             heading_1.setAttribute('colspan','2');
             heading_1.innerHTML = nameHead;
             row_1.appendChild(heading_1);
             thead.appendChild(row_1);
-
+        //додаємо останні рядки
         let row_2 ;
         let row_2_data_1 ;
         let row_2_data_2  ;
@@ -61,12 +85,12 @@ let objless = {
   }
 
   
-  createNewTable(weekDay[0],objless,0);
+  /*createNewTable(weekDay[0],objless,0);
   createNewTable(weekDay[1],objless,1);
   createNewTable(weekDay[2],objless,2);
   createNewTable(weekDay[3],objless,3);
   createNewTable(weekDay[4],objless,4);
-  
+  */
 
 
 //Знаходимо по якій з таблиць був клік і починаємо з нею працювати
@@ -76,6 +100,8 @@ $(document).on('click', 'table[class^="table"]', function(event) {
     if (event.target.className != 'nonEdit'){    //не редагуємо перші стовбці 
             let table = document.getElementById(event.currentTarget.id);
             let target = event.target.closest('.edit-cancel,.edit-ok,td');
+            let tableContent = table.querySelectorAll('td.trueEdit');
+            let newObjLess = new Object();
 
             if (!table.contains(target)) return;
 
@@ -83,13 +109,15 @@ $(document).on('click', 'table[class^="table"]', function(event) {
                 finishTdEdit(editingTd.elem, false);
             } else if (target.className == 'edit-ok') {
                 finishTdEdit(editingTd.elem, true);
-                console.log(table);
-                //console.log($('#'+event.currentTarget.id+'.trueEdit'));
-                console.log($('#table0.trueEdit'));
-                console.log($('#table0'));
-                console.log();
-               // console.log(table.querySelectorAll('tr'));
-               //console.log($('.trueEdit'));
+                 //якщо заходимо на редагування зберігаємо зміни в сховищі              
+                for (let i = 0; i < tableContent.length; ++i) {  
+                  newObjLess['item'+i] = tableContent[i].innerText;
+                }
+               //console.log(newObjLess);
+               //console.log(event.currentTarget.id.slice(-1));
+               localStorage.removeItem(weekDayEn[event.currentTarget.id.slice(-1)]);
+               localStorage.setItem(weekDayEn[event.currentTarget.id.slice(-1)], JSON.stringify(newObjLess)) ;
+               
             } else if (target.nodeName == 'TD') {
                 if (editingTd) return; // уже редактується
 
