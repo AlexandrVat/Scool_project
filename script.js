@@ -25,6 +25,22 @@ function createShedule(){
 
 createShedule();
 
+
+function createFromStorage(){
+  for (let i = 0; i < weekDayEn.length; ++i) {      
+    let rand;
+    let serialObj;
+    let objless = new Object(); 
+    for (let j = 0; j < 7; ++j) { 
+       rand = '12';
+       objless['item'+j] = subjects[rand];
+    }
+      
+    createNewTable(weekDay[i],objless,i); 
+ 
+  }  
+}
+
 /*
 let objless = {
     item1: 'Математика',
@@ -96,12 +112,14 @@ let objless = {
 //Знаходимо по якій з таблиць був клік і починаємо з нею працювати
 $(document).on('click', 'table[class^="table"]', function(event) {
     event.preventDefault();
-
+     
     if (event.target.className != 'nonEdit'){    //не редагуємо перші стовбці 
             let table = document.getElementById(event.currentTarget.id);
-            let target = event.target.closest('.edit-cancel,.edit-ok,td');
+            let target = event.target.closest('.edit-cancel,.edit-ok,.edit-delete,td');
             let tableContent = table.querySelectorAll('td.trueEdit');
             let newObjLess = new Object();
+            console.log('122');
+            console.log(target);
 
             if (!table.contains(target)) return;
 
@@ -118,7 +136,19 @@ $(document).on('click', 'table[class^="table"]', function(event) {
                localStorage.removeItem(weekDayEn[event.currentTarget.id.slice(-1)]);
                localStorage.setItem(weekDayEn[event.currentTarget.id.slice(-1)], JSON.stringify(newObjLess)) ;
                
-            } else if (target.nodeName == 'TD') {
+            } else if (target.className == 'edit-delete') {                     
+                     target.closest('tr').remove();
+                     tableContent = table.querySelectorAll('td.trueEdit');
+                       //якщо заходимо на редагування зберігаємо зміни в сховищі              
+                      for (let i = 0; i < tableContent.length; ++i) { 
+                        newObjLess['item'+i] = tableContent[i].innerText;
+                      }
+
+                     localStorage.removeItem(weekDayEn[event.currentTarget.id.slice(-1)]);
+                     localStorage.setItem(weekDayEn[event.currentTarget.id.slice(-1)], JSON.stringify(newObjLess)) ;
+                     finishTdEdit(editingTd.elem, false);
+
+            }else if (target.nodeName == 'TD') {
                 if (editingTd) return; // уже редактується
 
                 makeTdEditable(target);
@@ -146,7 +176,7 @@ function makeTdEditable(td) {
   textArea.focus();
 
   td.insertAdjacentHTML("beforeEnd",
-    '<div class="edit-controls"><button class="edit-ok">OK</button><button class="edit-cancel">CANCEL</button></div>'
+    '<div class="edit-controls"><button class="edit-ok">OK</button><button class="edit-cancel">CANCEL</button><button class="edit-delete">DELETE</button></div>'
   );
 }
 
@@ -159,3 +189,42 @@ function finishTdEdit(td, isOk) {
   td.classList.remove('edit-td');
   editingTd = null;
 }
+
+
+//---------------- Cлайдер
+
+//Створюємо кнопочки навігації
+$(document).ready(function()
+{
+  $(".slider").each(function ()
+  {
+    let obj = $(this);
+    $(obj).append("<div class='nav'></div>");
+
+    $(obj).find("li").each(function ()
+    {
+      $(obj).find(".nav").append("<span rel='"+$(this).index()+"'></span>");
+      $(this).addClass("slider"+$(this).index());
+    });
+
+    $(obj).find("span").first().addClass("on");
+  });
+});
+
+function sliderJS (obj, sl) // функції слайдеру
+{
+let ul = $(sl).find("ul");
+let bl = $(sl).find("li.slider"+obj);
+let step = $(bl).width();
+$(ul).animate({marginLeft: "-"+step*obj}, 500);
+}
+
+$(document).on("click", ".slider .nav span", function() // Клік по кнопкам слайдеру
+{
+let sl = $(this).closest(".slider");
+$(sl).find("span").removeClass("on");   //Зміна CSS для анімування натискання на кнопочки
+$(this).addClass("on");
+let obj = $(this).attr("rel");
+sliderJS(obj, sl);
+return false;
+});
